@@ -13,14 +13,14 @@ const LNG = 108.889191;
 const LIGHT = {
   gtk: "Yaru-blue",
   icon: "WhiteSur-light",
-  cursor: "MacOS",
+  cursor: "macOS-White",
   shell: "Yaru-blue",
 };
 
 const DARK = {
   gtk: "Yaru-blue-dark",
   icon: "WhiteSur-dark",
-  cursor: "MacOS",
+  cursor: "macOS",
   shell: "Yaru-blue-dark",
 };
 function loadUserThemeSettings() {
@@ -119,6 +119,7 @@ export default class AutoDarkmodeSwitcher {
   _apply(theme) {
     this._setIfChanged(this._iface, "gtk-theme", theme.gtk);
     this._setIfChanged(this._iface, "icon-theme", theme.icon);
+    this._setIfChanged(this._iface, "cursor-theme", theme.cursor);
     this._setIfChanged(this._userTheme, "name", theme.shell);
   }
 
