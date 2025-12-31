@@ -1,0 +1,7 @@
+{
+  "uuid": "auto-darkmode-switcher@mr-kechen",
+  "name": "Auto Darkmode Switcher",
+  "description": "Automatically switch GTK theme based on sunrise and sunset",
+  "shell-version": ["46", "47", "48"],
+  "version": 1
+}
