@@ -87,6 +87,9 @@ export default class AutoDarkmodePrefs extends ExtensionPreferences {
     });
 
     group.add(this._themeRow(settings, prefix, "gtk-theme", _("GTK Theme")));
+    group.add(
+      this._themeRow(settings, prefix, "color-scheme", _("Color Scheme")),
+    );
     group.add(this._themeRow(settings, prefix, "icon-theme", _("Icon Theme")));
     group.add(
       this._themeRow(settings, prefix, "cursor-theme", _("Cursor Theme")),

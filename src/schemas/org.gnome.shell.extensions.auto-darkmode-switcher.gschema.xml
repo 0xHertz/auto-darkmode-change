@@ -17,6 +17,9 @@
     </key>
 
     <!-- LIGHT -->
+    <key name="light-color-scheme" type="s">
+      <default>'prefer-light'</default>
+    </key>
     <key name="light-gtk-theme" type="s">
       <default>'Yaru-blue'</default>
     </key>
@@ -31,6 +34,9 @@
     </key>
 
     <!-- DARK -->
+    <key name="dark-color-scheme" type="s">
+      <default>'prefer-dark'</default>
+    </key>
     <key name="dark-gtk-theme" type="s">
       <default>'Yaru-blue-dark'</default>
     </key>

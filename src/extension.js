@@ -86,6 +86,7 @@ export default class AutoDarkmodeSwitcher extends Extension {
     const prefix = mode === "light" ? "light" : "dark";
 
     return {
+      colorScheme: this._settings.get_string(`${prefix}-color-scheme`),
       gtk: this._settings.get_string(`${prefix}-gtk-theme`),
       icon: this._settings.get_string(`${prefix}-icon-theme`),
       cursor: this._settings.get_string(`${prefix}-cursor-theme`),
@@ -128,6 +129,7 @@ export default class AutoDarkmodeSwitcher extends Extension {
   }
 
   _apply(theme) {
+    this._setIfChanged(this._iface, "color-scheme", theme.colorScheme);
     this._setIfChanged(this._iface, "gtk-theme", theme.gtk);
     this._setIfChanged(this._iface, "icon-theme", theme.icon);
     this._setIfChanged(this._iface, "cursor-theme", theme.cursor);
