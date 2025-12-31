@@ -6,6 +6,7 @@ It does the following:
 
 * Sets the light-theme at sunrise and automatically switches to the dark-theme at sunset.
   Affects the following:
+  
   * GTK-Theme
   * Icon-Theme
   * GNOME Shell Theme
@@ -35,6 +36,10 @@ It does the following:
   > $> gsettings set org.gnome.shell.extensions.user-theme name "Yaru-blue"
   > No such schema “org.gnome.shell.extensions.user-theme”
   > ```
+
+## gnome-extension
+
+* you can also use gnome extension in `src` without install anything.
 
 ## Installation
 
