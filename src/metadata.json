@@ -3,5 +3,6 @@
   "name": "Auto Darkmode Switcher",
   "description": "Automatically switch GTK theme based on sunrise and sunset",
   "shell-version": ["46", "47", "48"],
-  "version": 1
+  "version": 1,
+  "settings-schema": "org.gnome.shell.extensions.auto-darkmode-switcher"
 }

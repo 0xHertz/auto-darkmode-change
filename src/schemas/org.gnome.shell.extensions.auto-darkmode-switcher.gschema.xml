@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<schemalist>
+  <schema
+        id="org.gnome.shell.extensions.auto-darkmode-switcher"
+        path="/org/gnome/shell/extensions/auto-darkmode-switcher/"
+    >
+
+    <!-- 经纬度 -->
+    <key name="latitude" type="d">
+      <default>34.274342</default>
+      <summary>Latitude</summary>
+    </key>
+
+    <key name="longitude" type="d">
+      <default>108.889191</default>
+      <summary>Longitude</summary>
+    </key>
+
+    <!-- LIGHT -->
+    <key name="light-gtk-theme" type="s">
+      <default>'Yaru-blue'</default>
+    </key>
+    <key name="light-icon-theme" type="s">
+      <default>'WhiteSur-light'</default>
+    </key>
+    <key name="light-cursor-theme" type="s">
+      <default>'macOS-White'</default>
+    </key>
+    <key name="light-shell-theme" type="s">
+      <default>'Yaru-blue'</default>
+    </key>
+
+    <!-- DARK -->
+    <key name="dark-gtk-theme" type="s">
+      <default>'Yaru-blue-dark'</default>
+    </key>
+    <key name="dark-icon-theme" type="s">
+      <default>'WhiteSur-dark'</default>
+    </key>
+    <key name="dark-cursor-theme" type="s">
+      <default>'macOS'</default>
+    </key>
+    <key name="dark-shell-theme" type="s">
+      <default>'Yaru-blue-dark'</default>
+    </key>
+    <key name="apply-now" type="b">
+      <default>false</default>
+      <summary>Apply theme immediately</summary>
+    </key>
+
+  </schema>
+</schemalist>

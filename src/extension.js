@@ -2,27 +2,8 @@ import Gio from "gi://Gio";
 import GLib from "gi://GLib";
 
 import { getSunTimes } from "./suntimes.js";
+import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
 
-/* ====== 配置区（等价于你脚本里的变量） ====== */
-
-// 经纬度
-const LAT = 34.274342;
-const LNG = 108.889191;
-
-// 亮 / 暗 主题
-const LIGHT = {
-  gtk: "Yaru-blue",
-  icon: "WhiteSur-light",
-  cursor: "macOS-White",
-  shell: "Yaru-blue",
-};
-
-const DARK = {
-  gtk: "Yaru-blue-dark",
-  icon: "WhiteSur-dark",
-  cursor: "macOS",
-  shell: "Yaru-blue-dark",
-};
 function loadUserThemeSettings() {
   const SCHEMA_ID = "org.gnome.shell.extensions.user-theme";
 
@@ -64,11 +45,19 @@ function loadUserThemeSettings() {
 
 /* ============================================ */
 
-export default class AutoDarkmodeSwitcher {
+export default class AutoDarkmodeSwitcher extends Extension {
   enable() {
     this._iface = new Gio.Settings({
       schema: "org.gnome.desktop.interface",
     });
+    this._settings = this.getSettings();
+    this._settingsChangedId = this._settings.connect(
+      "changed::apply-now",
+      () => {
+        log("[AutoDarkmode] Apply requested from prefs");
+        this._reschedule(); // 或者直接 this._applyCurrent()
+      },
+    );
 
     this._userThemeSettings = loadUserThemeSettings();
 
@@ -81,11 +70,32 @@ export default class AutoDarkmodeSwitcher {
       GLib.source_remove(this._timer);
       this._timer = 0;
     }
+    if (this._settingsChangedId) {
+      this._settings.disconnect(this._settingsChangedId);
+      this._settingsChangedId = 0;
+    }
+  }
+  _getLocation() {
+    return {
+      lat: this._settings.get_double("latitude"),
+      lng: this._settings.get_double("longitude"),
+    };
   }
 
+  _getTheme(mode) {
+    const prefix = mode === "light" ? "light" : "dark";
+
+    return {
+      gtk: this._settings.get_string(`${prefix}-gtk-theme`),
+      icon: this._settings.get_string(`${prefix}-icon-theme`),
+      cursor: this._settings.get_string(`${prefix}-cursor-theme`),
+      shell: this._settings.get_string(`${prefix}-shell-theme`),
+    };
+  }
   _reschedule() {
     const now = new Date();
-    const { sunrise, sunset } = getSunTimes(now, LAT, LNG);
+    const { lat, lng } = this._getLocation();
+    const { sunrise, sunset } = getSunTimes(now, lat, lng);
     log(`[AutoDarkmode] Sunrise: ${sunrise}, Sunset: ${sunset}`);
 
     let next;
@@ -98,15 +108,16 @@ export default class AutoDarkmodeSwitcher {
 
     if (lastSunrise > lastSunset) {
       // 最近的是日出 → 白天
-      mode = LIGHT;
+      mode = "light";
       next = sunset > now ? sunset : sunrise;
     } else {
       // 最近的是日落 → 夜晚
-      mode = DARK;
+      mode = "dark";
       next = sunrise > now ? sunrise : sunset;
     }
-    log(`[AutoDarkmode] ${mode === LIGHT ? "LIGHT" : "DARK"} mode at ${now}`);
-    this._apply(mode);
+    log(`[AutoDarkmode] ${mode} mode at ${now}`);
+    const theme = this._getTheme(mode);
+    this._apply(theme);
 
     const delay = Math.max(5, Math.floor((next - now) / 1000));
 
@@ -120,7 +131,7 @@ export default class AutoDarkmodeSwitcher {
     this._setIfChanged(this._iface, "gtk-theme", theme.gtk);
     this._setIfChanged(this._iface, "icon-theme", theme.icon);
     this._setIfChanged(this._iface, "cursor-theme", theme.cursor);
-    this._setIfChanged(this._userTheme, "name", theme.shell);
+    this._setIfChanged(this._userThemeSettings, "name", theme.shell);
   }
 
   _setIfChanged(settings, key, value) {
